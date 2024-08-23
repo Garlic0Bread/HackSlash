@@ -1,0 +1,6 @@
+To account for the possiblity of being able to have a unique character: 
+There will be base character stats with its own logic and players/avatar stats that will have different set of logic.
+
+However, there is one script that centralises the different logic that will exist for the player(s), this is to 
+avoid the need for each script to reference each other everytime they need something 
+from another script, instead they call on one script to do so: CharacterManager
