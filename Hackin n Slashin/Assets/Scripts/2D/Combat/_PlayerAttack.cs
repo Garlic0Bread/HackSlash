@@ -25,7 +25,6 @@ public class _PlayerAttack : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && timeSinceAttack >= timeBtwAttacks)
         {
-            print("input registered");
             Attack();
         }
         timeSinceAttack += Time.deltaTime;

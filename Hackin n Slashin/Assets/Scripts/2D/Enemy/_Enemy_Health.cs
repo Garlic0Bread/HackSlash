@@ -6,23 +6,29 @@ public class _Enemy_Health : MonoBehaviour, IDamageable
 {
     [SerializeField] private float maxHealth = 3f;
     private Animator anim;
-
+    private HealthBar healthBar;
     private float currentHealth;
 
     private void Start()
     {
         currentHealth = maxHealth; 
+        healthBar = GetComponentInChildren<HealthBar>();
         anim = GetComponent<Animator>();
     }
 
     public void Damage(float damageAmount)
     {
-        anim.SetTrigger("Hurt");
         currentHealth -= damageAmount;
-        if(currentHealth <= 0)
+        healthBar.UpdateHealthBar(maxHealth, currentHealth);
+        if (currentHealth <= 0)
         {
             Die();
         }
+        else
+        {
+            anim.SetTrigger("Hurt");
+        }
+
     }
 
     private void Die()

@@ -239,65 +239,6 @@
                     "isPartOfComposite": true
                 }
             ]
-        },
-        {
-            "name": "Attack",
-            "id": "73185d0a-2a78-4944-b515-505059671388",
-            "actions": [
-                {
-                    "name": "Attack",
-                    "type": "PassThrough",
-                    "id": "e3798627-dd18-4549-a2cd-7952888c5872",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Attack2",
-                    "type": "Button",
-                    "id": "c222a97b-d931-4398-901d-0b8d1bd1cc81",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "ad1d29e0-6dd6-48f5-a614-50a3012aa464",
-                    "path": "<Keyboard>/leftCtrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "21f3f20b-c2a6-43d1-8873-1ea0bb59af43",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8c21cdae-51c7-4ba6-834f-af2f45017e4c",
-                    "path": "<Keyboard>/k",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
         }
     ],
     "controlSchemes": []
