@@ -1,15 +1,25 @@
 using OWL;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
-public class Player_Attacker : MonoBehaviour
+public class Player_Attacker : GenericBehaviour
 {
     public static Player_Attacker instance;
 
     private Animator anim;
     private int hasAttackCounter = Animator.StringToHash("AttackCounter");
+
+
+    public void Handle_LightAttack(WeaponItem weapon)
+    { 
+
+    }
+
+    public void Handle_HeavyAttack(WeaponItem weapon)
+    {
+
+    }
 
     private void Awake()
     {

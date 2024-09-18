@@ -22,6 +22,7 @@ public class BasicBehaviour : MonoBehaviour
 	private ThirdPersonOrbitCamBasic camScript;           // Reference to the third person camera script.
 	private bool sprint;                                  // Boolean to determine whether or not the player activated the sprint mode.
 	private bool changedFOV;                              // Boolean to store when the sprint action has changed de camera FOV.
+	public bool isInteracting;
 	private int hFloat;                                   // Animator variable related to Horizontal Axis.
 	private int vFloat;                                   // Animator variable related to Vertical Axis.
 	private List<GenericBehaviour> behaviours;            // The list containing all the enabled player behaviours.
@@ -66,7 +67,6 @@ public class BasicBehaviour : MonoBehaviour
 		groundedBool = Animator.StringToHash("Grounded");
 		colExtents = GetComponent<Collider>().bounds.extents;
 	}
-
 	void Update()
 	{
 		// Store the input axes.
@@ -94,7 +94,6 @@ public class BasicBehaviour : MonoBehaviour
 		// Set the grounded test on the Animator Controller.
 		anim.SetBool(groundedBool, IsGrounded());
 	}
-
 	// Call the FixedUpdate functions of the active or overriding behaviours.
 	void FixedUpdate()
 	{
@@ -127,7 +126,6 @@ public class BasicBehaviour : MonoBehaviour
 			Repositioning ();
 		}
 	}
-
 	// Call the LateUpdate functions of the active or overriding behaviours.
 	private void LateUpdate()
 	{
@@ -153,8 +151,10 @@ public class BasicBehaviour : MonoBehaviour
 
 	}
 
-	// Put a new behaviour on the behaviours watch list.
-	public void SubscribeBehaviour(GenericBehaviour behaviour)
+
+    #region Behaviour Implementation
+    // Put a new behaviour on the behaviours watch list.
+    public void SubscribeBehaviour(GenericBehaviour behaviour)
 	{
 		behaviours.Add (behaviour);
 	}
@@ -264,15 +264,14 @@ public class BasicBehaviour : MonoBehaviour
 			behaviourLocked = 0;
 		}
 	}
+    #endregion
 
-	// Common functions to any behaviour:
-
-	// Check if player is sprinting.
-	public virtual bool IsSprinting()
+    // Common functions to any behaviour:
+    // Check if player is sprinting.
+    public virtual bool IsSprinting()
 	{
 		return sprint && IsMoving() && CanSprint();
 	}
-
 	// Check if player can sprint (all behaviours must allow).
 	public bool CanSprint()
 	{
@@ -294,7 +293,6 @@ public class BasicBehaviour : MonoBehaviour
 	{
 		return h != 0;
 	}
-
 	// Check if the player is moving.
 	public bool IsMoving()
 	{
@@ -306,13 +304,11 @@ public class BasicBehaviour : MonoBehaviour
 	{
 		return lastDirection;
 	}
-
 	// Set the last player direction of facing.
 	public void SetLastDirection(Vector3 direction)
 	{
 		lastDirection = direction;
 	}
-
 	// Put the player on a standing up position based on last direction faced.
 	public void Repositioning()
 	{
@@ -324,13 +320,19 @@ public class BasicBehaviour : MonoBehaviour
 			rBody.MoveRotation (newRotation);
 		}
 	}
-
 	// Function to tell whether or not the player is on ground.
 	public bool IsGrounded()
 	{
 		Ray ray = new Ray(this.transform.position + Vector3.up * (2 * colExtents.x), Vector3.down);
 		return Physics.SphereCast(ray, colExtents.x, colExtents.x + 0.2f);
 	}
+
+    public void Player_TargetAnimation(string targetAnim, bool isInteracting)
+    {
+        anim.applyRootMotion = isInteracting;
+        anim.SetBool("isInteracting", isInteracting);
+        anim.CrossFade(targetAnim, 0.2f);
+    }
 }
 
 // This is the base class for all player behaviours, any custom behaviour must inherit from this.

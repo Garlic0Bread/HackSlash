@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Inventory : MonoBehaviour
+public class Player_Inventory : GenericBehaviour
 {
     WeaponSlot_Manager WeaponSlot_Manager;
 

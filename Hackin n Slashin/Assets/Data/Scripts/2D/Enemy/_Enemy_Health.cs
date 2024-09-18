@@ -6,13 +6,13 @@ public class _Enemy_Health : MonoBehaviour, IDamageable
 {
     [SerializeField] private float maxHealth = 3f;
     private Animator anim;
-    private HealthBar healthBar;
+    private _HealthBar healthBar;
     private float currentHealth;
 
     private void Start()
     {
         currentHealth = maxHealth; 
-        healthBar = GetComponentInChildren<HealthBar>();
+        healthBar = GetComponentInChildren<_HealthBar>();
         anim = GetComponent<Animator>();
     }
 

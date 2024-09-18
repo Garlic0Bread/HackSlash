@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Reset_AnimationBool : MonoBehaviour
+public class Reset_AnimationBool : StateMachineBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public string targetBool;
+    public bool status;
 
-    // Update is called once per frame
-    void Update()
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        animator.SetBool(targetBool, status);
     }
 }

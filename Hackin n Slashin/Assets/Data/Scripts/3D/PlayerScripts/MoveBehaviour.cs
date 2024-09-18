@@ -41,7 +41,6 @@ public class MoveBehaviour : GenericBehaviour
 			jump = true;
 		}
 	}
-
 	// LocalFixedUpdate overrides the virtual function of the base class.
 	public override void LocalFixedUpdate()
 	{
