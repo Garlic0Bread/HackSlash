@@ -8,7 +8,8 @@ public class _PlayerAttack : MonoBehaviour
     private Animator anim;
     private RaycastHit2D[] hits;
     private int currentAttack = 0;
-    private float timeSinceAttack = 0.0f;
+    public float timeSinceAttack = 0.0f;
+    public bool isAttacking = false;
 
     [SerializeField] private Transform attackTransform;
     [SerializeField] private float attackRange = 1.5f;
@@ -25,6 +26,7 @@ public class _PlayerAttack : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && timeSinceAttack >= timeBtwAttacks)
         {
+            isAttacking = true;
             Attack();
         }
         timeSinceAttack += Time.deltaTime;

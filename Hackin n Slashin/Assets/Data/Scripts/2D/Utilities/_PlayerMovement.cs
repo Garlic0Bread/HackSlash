@@ -45,6 +45,7 @@ namespace OWL
         private float coyoteTimer;
 
         private Coroutine resetTriggersCoroutine;
+        _PlayerAttack playerAttack;
 
         private void Awake()
         {
@@ -54,6 +55,7 @@ namespace OWL
         private void Start()
         {
             anim = GetComponent<Animator>();
+            playerAttack = GetComponent<_PlayerAttack>();
         }
         private void Update()
         {
@@ -78,6 +80,15 @@ namespace OWL
         #region Movement
         private void Move(float acceleration, float deceleration, Vector2 moveInput)
         {
+            if (playerAttack.isAttacking && isGrounded)
+            {
+                moveInput = Vector2.zero;
+            }
+            if(playerAttack.timeSinceAttack >= 0.55f)
+            {
+                playerAttack.isAttacking = false;
+            }
+
             if (moveInput != Vector2.zero) 
             {
                 anim.SetBool("isWalking", true);

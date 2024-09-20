@@ -57,7 +57,7 @@ public class BasicBehaviour : MonoBehaviour
         // Set up the references.
         behaviours = new List<GenericBehaviour> ();
 		overridingBehaviours = new List<GenericBehaviour>();
-		anim = GetComponent<Animator> ();
+		anim = GetComponentInChildren<Animator> ();
 		hFloat = Animator.StringToHash("H");
 		vFloat = Animator.StringToHash("V");
 		camScript = playerCamera.GetComponent<ThirdPersonOrbitCamBasic> ();
