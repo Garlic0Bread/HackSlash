@@ -106,7 +106,7 @@ public class HeroKnight : MonoBehaviour {
         else if (Input.GetKeyDown("q") && !m_rolling)
             m_animator.SetTrigger("Hurt");
 
-        //Attack
+        //Melee_Attack
         else if(Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
             m_currentAttack++;
@@ -115,12 +115,12 @@ public class HeroKnight : MonoBehaviour {
             if (m_currentAttack > 3)
                 m_currentAttack = 1;
 
-            // Reset Attack combo if time since last attack is too large
+            // Reset Melee_Attack combo if time since last attack is too large
             if (m_timeSinceAttack > 1.0f)
                 m_currentAttack = 1;
 
             // Call one of three attack animations "Attack1", "Attack2", "Attack3"
-            m_animator.SetTrigger("Attack" + m_currentAttack);
+            m_animator.SetTrigger("Melee_Attack" + m_currentAttack);
 
             // Reset timer
             m_timeSinceAttack = 0.0f;
