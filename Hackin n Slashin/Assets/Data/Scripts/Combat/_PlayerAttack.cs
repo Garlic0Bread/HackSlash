@@ -13,7 +13,8 @@ public class _PlayerAttack : MonoBehaviour
     public bool isAttacking = false;
 
     [Header("Audio Handling")]
-    private float currentAudioTime;
+    [SerializeField] private bool bonusOn;
+    [SerializeField] private float currentAudioTime;
     [SerializeField] private float timeWindow = 5f; // 5-second window
     [SerializeField] private float targetTime = 20f; // 00:20 in seconds
     [SerializeField] private float bonusDamage = 3f;
@@ -46,11 +47,22 @@ public class _PlayerAttack : MonoBehaviour
         SetShootMode(currentShootmode);
         anim = GetComponent<Animator>();
         timeSinceAttack = timeBtwAttacks;
-        currentAudioTime = audioSource.time;
+        audioSource.Play();
     }
     private void Update()
     {
-        print(currentAudioTime);
+        currentAudioTime = audioSource.time;
+        if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
+        {
+            // Player hit within the timing window, apply bonus damage
+            if (Input.GetKeyDown(KeyCode.E) && timeSinceAttack >= timeBtwAttacks)
+            {
+                print("bonus damage activated");
+                bonusOn = true;
+                Melee_Attack();
+            }
+        }
+
         if (Input.GetMouseButtonDown(0) && timeSinceAttack >= timeBtwAttacks)
         {
             isAttacking = true;
@@ -78,7 +90,6 @@ public class _PlayerAttack : MonoBehaviour
         Gizmos.DrawWireSphere(attackTransform.position, attackRange);
     }
 
-
     private void Melee_Attack()
     {
         //deal damage
@@ -88,9 +99,9 @@ public class _PlayerAttack : MonoBehaviour
         {
             IDamageable i_Damageable = hits[i].collider.gameObject.GetComponent<IDamageable>();
 
-            if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow && i_Damageable != null)
+            if (bonusOn && i_Damageable != null)// Player hit within song keyMoment timing-window, apply bonus damage
             {
-                // Player hit within the timing window, apply bonus damage
+                
                 i_Damageable.Damage(bonusDamage);
             }
 
