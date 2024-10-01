@@ -12,15 +12,21 @@ public class _PlayerAttack : MonoBehaviour
     public float timeSinceAttack = 0.0f;
     public bool isAttacking = false;
 
-    [Header("Melee Melee_Attack")]
-    [SerializeField] private Transform attackTransform;
-    [SerializeField] private float attackRange = 1.5f;
-    [SerializeField] private LayerMask attackableLayer;
+    [Header("Audio Handling")]
+    private float currentAudioTime;
+    [SerializeField] private float timeWindow = 5f; // 5-second window
+    [SerializeField] private float targetTime = 20f; // 00:20 in seconds
+    [SerializeField] private float bonusDamage = 3f;
+    [SerializeField] private AudioSource audioSource; // Your music track
+
+    [Header("Melee Attack")]
     [SerializeField] private float damageAmount = 1f;
+    [SerializeField] private float attackRange = 1.5f;
+    [SerializeField] private Transform attackTransform;
+    [SerializeField] private LayerMask attackableLayer;
     [SerializeField] private float timeBtwAttacks = 0.25f;
 
-    [Header("Shooting Melee_Attack")]
-    
+    [Header("Shooting Attack")]
     [SerializeField] private float nextFireTime;
     [SerializeField] private float shieldTimout;
     [SerializeField] private Transform playerGun;
@@ -29,20 +35,22 @@ public class _PlayerAttack : MonoBehaviour
     [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private float spreadAngle = 15f;
     public ShootMode currentShootmode = ShootMode.Single;
+
     public enum ShootMode
     {
         Single,
         Spread,
     }
-
     private void Start()
     {
         SetShootMode(currentShootmode);
         anim = GetComponent<Animator>();
         timeSinceAttack = timeBtwAttacks;
+        currentAudioTime = audioSource.time;
     }
     private void Update()
     {
+        print(currentAudioTime);
         if (Input.GetMouseButtonDown(0) && timeSinceAttack >= timeBtwAttacks)
         {
             isAttacking = true;
@@ -79,7 +87,14 @@ public class _PlayerAttack : MonoBehaviour
         for(int i = 0; i < hits.Length; i++)
         {
             IDamageable i_Damageable = hits[i].collider.gameObject.GetComponent<IDamageable>();
-            if(i_Damageable != null )
+
+            if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow && i_Damageable != null)
+            {
+                // Player hit within the timing window, apply bonus damage
+                i_Damageable.Damage(bonusDamage);
+            }
+
+            else if  (i_Damageable != null )
             {
                 i_Damageable.Damage(damageAmount);
             }
