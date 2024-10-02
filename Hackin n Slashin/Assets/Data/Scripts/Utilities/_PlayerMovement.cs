@@ -65,8 +65,6 @@ namespace OWL
         {
             CollisionChecks();
             Jump();
-            var playerInput_P1 = _InputManager.Movement;
-            var playerInput_P2 = _InputManager1.Movement;
 
             if (this.gameObject.CompareTag("Player1"))
             {
@@ -90,8 +88,6 @@ namespace OWL
                     Move(moveStats.AirAcceleration, moveStats.AirDeceleration, _InputManager1.Movement);
                 }
             }
-
-            
         }
 
         #region Movement
@@ -155,191 +151,381 @@ namespace OWL
         #region Jumping
         private void Jump()
         {
-            
-           
-            if (isJumping)
+            if (this.gameObject.CompareTag("Player1"))
             {
-                //check for head bump
-                if (bumbedHead)
+                if (isJumping)
                 {
-                    isFastFalling = true;
-                }
-                //gravity on ascending
-                if(verticalVelocity >= 0f)
-                {
-                    //apex controls
-                    apexPoint = Mathf.InverseLerp(moveStats.InitialJumpVelocity, 0f, verticalVelocity);
-
-                    if(apexPoint > moveStats.apexThreshold)
+                    //check for head bump
+                    if (bumbedHead)
                     {
-                        if (!isPastApexThreshold)
-                        {
-                            isPastApexThreshold = true;
-                            timePastApexThreshold = 0f;
-                        }
+                        isFastFalling = true;
+                    }
+                    //gravity on ascending
+                    if (verticalVelocity >= 0f)
+                    {
+                        //apex controls
+                        apexPoint = Mathf.InverseLerp(moveStats.InitialJumpVelocity, 0f, verticalVelocity);
 
-                        if (isPastApexThreshold)
+                        if (apexPoint > moveStats.apexThreshold)
                         {
-                            timePastApexThreshold += Time.fixedDeltaTime;
-                            if(timePastApexThreshold < moveStats.apexHangTime)
+                            if (!isPastApexThreshold)
                             {
-                                verticalVelocity = 0f;
+                                isPastApexThreshold = true;
+                                timePastApexThreshold = 0f;
                             }
-                            else
+
+                            if (isPastApexThreshold)
                             {
-                                verticalVelocity = -0.01f;
+                                timePastApexThreshold += Time.fixedDeltaTime;
+                                if (timePastApexThreshold < moveStats.apexHangTime)
+                                {
+                                    verticalVelocity = 0f;
+                                }
+                                else
+                                {
+                                    verticalVelocity = -0.01f;
+                                }
+                            }
+                        }
+                        //gravity on ascending but not pas apex threshold
+                        else
+                        {
+                            verticalVelocity += moveStats.Gravity * Time.fixedDeltaTime;
+                            if (isPastApexThreshold)
+                            {
+                                isPastApexThreshold = false;
                             }
                         }
                     }
-                    //gravity on ascending but not pas apex threshold
-                    else
+
+                    //gravity on descending
+                    else if (!isFastFalling)
                     {
-                        verticalVelocity += moveStats.Gravity * Time.fixedDeltaTime;
-                        if (isPastApexThreshold)
+                        verticalVelocity += moveStats.Gravity * moveStats.gravityOnReleaseMultiplier * Time.fixedDeltaTime;
+                    }
+                    else if (verticalVelocity < 0f)
+                    {
+                        if (!isFalling)
                         {
-                            isPastApexThreshold = false;
+                            isFalling = true;
                         }
                     }
                 }
 
-                //gravity on descending
-                else if (!isFastFalling)
+                //jump cut
+                if (isFastFalling)
                 {
-                    verticalVelocity += moveStats.Gravity * moveStats.gravityOnReleaseMultiplier * Time.fixedDeltaTime;
+                    anim.SetBool("canFall", true);
+
+                    if (fastfallTime >= moveStats.timeForUpwardsCancel)
+                    {
+                        verticalVelocity += moveStats.Gravity * moveStats.gravityOnReleaseMultiplier * Time.fixedDeltaTime;
+                    }
+                    else if (fastfallTime < moveStats.timeForUpwardsCancel)
+                    {
+                        verticalVelocity = Mathf.Lerp(fastFallReleasesSpeed, 0f, (fastfallTime / moveStats.timeForUpwardsCancel));
+                    }
+                    fastfallTime += Time.fixedDeltaTime;
                 }
-                else if(verticalVelocity < 0f)
+
+                //normal gravity while falling
+                if (!isGrounded && !isJumping)
                 {
                     if (!isFalling)
                     {
                         isFalling = true;
                     }
+                    verticalVelocity += moveStats.Gravity * Time.fixedDeltaTime;
                 }
+
+                //clamp fall speed
+                verticalVelocity = Mathf.Clamp(verticalVelocity, -moveStats.maxFallSpeed, 50f);
+                rb2.velocity = new Vector2(rb2.velocity.x, verticalVelocity);
             }
 
-            //jump cut
-            if (isFastFalling)
+            else if (this.gameObject.CompareTag("Player2"))
             {
-                anim.SetBool("canFall", true);
+                if (isJumping)
+                {
+                    //check for head bump
+                    if (bumbedHead)
+                    {
+                        isFastFalling = true;
+                    }
+                    //gravity on ascending
+                    if (verticalVelocity >= 0f)
+                    {
+                        //apex controls
+                        apexPoint = Mathf.InverseLerp(moveStats.InitialJumpVelocity, 0f, verticalVelocity);
 
-                if (fastfallTime >= moveStats.timeForUpwardsCancel)
-                {
-                    verticalVelocity += moveStats.Gravity * moveStats.gravityOnReleaseMultiplier * Time.fixedDeltaTime;
+                        if (apexPoint > moveStats.apexThreshold)
+                        {
+                            if (!isPastApexThreshold)
+                            {
+                                isPastApexThreshold = true;
+                                timePastApexThreshold = 0f;
+                            }
+
+                            if (isPastApexThreshold)
+                            {
+                                timePastApexThreshold += Time.fixedDeltaTime;
+                                if (timePastApexThreshold < moveStats.apexHangTime)
+                                {
+                                    verticalVelocity = 0f;
+                                }
+                                else
+                                {
+                                    verticalVelocity = -0.01f;
+                                }
+                            }
+                        }
+                        //gravity on ascending but not pas apex threshold
+                        else
+                        {
+                            verticalVelocity += moveStats.Gravity * Time.fixedDeltaTime;
+                            if (isPastApexThreshold)
+                            {
+                                isPastApexThreshold = false;
+                            }
+                        }
+                    }
+
+                    //gravity on descending
+                    else if (!isFastFalling)
+                    {
+                        verticalVelocity += moveStats.Gravity * moveStats.gravityOnReleaseMultiplier * Time.fixedDeltaTime;
+                    }
+                    else if (verticalVelocity < 0f)
+                    {
+                        if (!isFalling)
+                        {
+                            isFalling = true;
+                        }
+                    }
                 }
-                else if(fastfallTime < moveStats.timeForUpwardsCancel)
+
+                //jump cut
+                if (isFastFalling)
                 {
-                    verticalVelocity = Mathf.Lerp(fastFallReleasesSpeed, 0f, (fastfallTime / moveStats.timeForUpwardsCancel));
+                    anim.SetBool("canFall", true);
+
+                    if (fastfallTime >= moveStats.timeForUpwardsCancel)
+                    {
+                        verticalVelocity += moveStats.Gravity * moveStats.gravityOnReleaseMultiplier * Time.fixedDeltaTime;
+                    }
+                    else if (fastfallTime < moveStats.timeForUpwardsCancel)
+                    {
+                        verticalVelocity = Mathf.Lerp(fastFallReleasesSpeed, 0f, (fastfallTime / moveStats.timeForUpwardsCancel));
+                    }
+                    fastfallTime += Time.fixedDeltaTime;
                 }
-                fastfallTime += Time.fixedDeltaTime;
+
+                //normal gravity while falling
+                if (!isGrounded && !isJumping)
+                {
+                    if (!isFalling)
+                    {
+                        isFalling = true;
+                    }
+                    verticalVelocity += moveStats.Gravity * Time.fixedDeltaTime;
+                }
+
+                //clamp fall speed
+                verticalVelocity = Mathf.Clamp(verticalVelocity, -moveStats.maxFallSpeed, 50f);
+                rb2.velocity = new Vector2(rb2.velocity.x, verticalVelocity);
             }
-
-            //normal gravity while falling
-            if(!isGrounded && !isJumping)
-            {
-                if (!isFalling)
-                {
-                    isFalling = true;
-                }
-                verticalVelocity += moveStats.Gravity * Time.fixedDeltaTime;
-            }
-
-            //clamp fall speed
-            verticalVelocity = Mathf.Clamp(verticalVelocity, -moveStats.maxFallSpeed, 50f);
-            rb2.velocity = new Vector2(rb2.velocity.x, verticalVelocity);
-
         }
         private void JumpChecks()
         {
-            anim.SetFloat("AirY_Speed", rb2.velocity.y);
-
-            //when jump button is pressed
-            if (_InputManager.jumpWasPressed)
+            if (this.gameObject.CompareTag("Player1"))
             {
-                anim.SetTrigger("Jump");
-                jumpBufferTimer = moveStats.jumpBufferTime;
-                jumpReleasesDuringBuffer = false;
-            }
+                anim.SetFloat("AirY_Speed", rb2.velocity.y);
 
-            //when released
-            if (_InputManager.jumpWasReleased)
-            {
-                resetTriggersCoroutine = StartCoroutine(Reset());
-
-                if (jumpBufferTimer > 0f)
+                //when jump button is pressed
+                if (_InputManager.jumpWasPressed)
                 {
-                    jumpReleasesDuringBuffer = true;
+                    anim.SetTrigger("Jump");
+                    jumpBufferTimer = moveStats.jumpBufferTime;
+                    jumpReleasesDuringBuffer = false;
                 }
-                if(isJumping && verticalVelocity > 0f)
+
+                //when released
+                if (_InputManager.jumpWasReleased)
                 {
-                    if (isPastApexThreshold)
+                    resetTriggersCoroutine = StartCoroutine(Reset());
+
+                    if (jumpBufferTimer > 0f)
                     {
-                        isPastApexThreshold = false;
-                        isFastFalling = true;
-                        fastfallTime = moveStats.timeForUpwardsCancel;
-                        verticalVelocity = 0f;
+                        jumpReleasesDuringBuffer = true;
                     }
-                    else
+                    if (isJumping && verticalVelocity > 0f)
+                    {
+                        if (isPastApexThreshold)
+                        {
+                            isPastApexThreshold = false;
+                            isFastFalling = true;
+                            fastfallTime = moveStats.timeForUpwardsCancel;
+                            verticalVelocity = 0f;
+                        }
+                        else
+                        {
+                            isFastFalling = true;
+                            fastFallReleasesSpeed = verticalVelocity;
+                        }
+                    }
+                }
+
+                //initiate jump w jump buffering and coyote time
+                if (jumpBufferTimer > 0f && !isJumping && (isGrounded || coyoteTimer > 0f))
+                {
+                    InitiateJump(1);
+                    if (jumpReleasesDuringBuffer)
                     {
                         isFastFalling = true;
                         fastFallReleasesSpeed = verticalVelocity;
                     }
                 }
-            }
 
-            //initiate jump w jump buffering and coyote time
-            if(jumpBufferTimer > 0f && !isJumping && (isGrounded || coyoteTimer > 0f))
-            {
-                InitiateJump(1);
-                if (jumpReleasesDuringBuffer)
+                //double jump
+                else if (jumpBufferTimer > 0f && isJumping && numberOfJumpsUsed < moveStats.numberOfJumpsAllowed)
                 {
-                    isFastFalling = true;
-                    fastFallReleasesSpeed = verticalVelocity;
+                    isFastFalling = false;
+                    InitiateJump(1);
                 }
-            }
 
-            //double jump
-            else if(jumpBufferTimer > 0f && isJumping && numberOfJumpsUsed < moveStats.numberOfJumpsAllowed)
-            {
-                isFastFalling = false;
-                InitiateJump(1);
-            }
-
-            //air jump after coyote time lapsed
-            else if(jumpBufferTimer > 0f && isFalling && numberOfJumpsUsed < moveStats.numberOfJumpsAllowed - 1)
-            {
-                InitiateJump(2);
-                isFastFalling = false;
-            }
-
-            //landed
-            if ((isJumping || isFastFalling) && isGrounded && verticalVelocity <= 0f)
-            {
-                isJumping = false;
-                isFalling = false;
-                isFastFalling = false;
-                fastfallTime = 0f;
-                isPastApexThreshold = false;
-                numberOfJumpsUsed = 0;
-
-                verticalVelocity = Physics2D.gravity.y;
-            }
-            else if (OnWall() && !isGrounded)
-            {
-                verticalVelocity = 0f;
-                anim.SetTrigger("WallSlide");
-                if (_InputManager.jumpWasPressed)
+                //air jump after coyote time lapsed
+                else if (jumpBufferTimer > 0f && isFalling && numberOfJumpsUsed < moveStats.numberOfJumpsAllowed - 1)
                 {
-                    // Determine wall direction using isFacingRight (1 if facing right, -1 if facing left)
-                    float wallDirection = isFacingRight ? 1f : -1f;
-
-                    // Create a Vector2 for jumping away from the wall and upwards
-                    Vector2 jumpDirection = new Vector2(-wallDirection * jumpAwayForce, jumpUpwardForce);
-
-                    // Apply the jump direction to the player's Rigidbody2D
-                    moveVelocity = Vector2.Lerp(moveVelocity, jumpDirection, 20f * Time.fixedDeltaTime);
-                    rb2.velocity = new Vector2(moveVelocity.x, rb2.velocity.y);
-                    verticalVelocity = moveVelocity.magnitude;
+                    InitiateJump(2);
+                    isFastFalling = false;
                 }
-            }//wall jump
+
+                //landed
+                if ((isJumping || isFastFalling) && isGrounded && verticalVelocity <= 0f)
+                {
+                    isJumping = false;
+                    isFalling = false;
+                    isFastFalling = false;
+                    fastfallTime = 0f;
+                    isPastApexThreshold = false;
+                    numberOfJumpsUsed = 0;
+
+                    verticalVelocity = Physics2D.gravity.y;
+                }
+                else if (OnWall() && !isGrounded)
+                {
+                    verticalVelocity = 0f;
+                    anim.SetTrigger("WallSlide");
+                    if (_InputManager.jumpWasPressed)
+                    {
+                        // Determine wall direction using isFacingRight (1 if facing right, -1 if facing left)
+                        float wallDirection = isFacingRight ? 1f : -1f;
+
+                        // Create a Vector2 for jumping away from the wall and upwards
+                        Vector2 jumpDirection = new Vector2(-wallDirection * jumpAwayForce, jumpUpwardForce);
+
+                        // Apply the jump direction to the player's Rigidbody2D
+                        moveVelocity = Vector2.Lerp(moveVelocity, jumpDirection, 20f * Time.fixedDeltaTime);
+                        rb2.velocity = new Vector2(moveVelocity.x, rb2.velocity.y);
+                        verticalVelocity = moveVelocity.magnitude;
+                    }
+                }//wall jump
+            }
+
+            else if (this.gameObject.CompareTag("Player2"))
+            {
+                anim.SetFloat("AirY_Speed", rb2.velocity.y);
+
+                //when jump button is pressed
+                if (_InputManager1.jumpWasPressed)
+                {
+                    anim.SetTrigger("Jump");
+                    jumpBufferTimer = moveStats.jumpBufferTime;
+                    jumpReleasesDuringBuffer = false;
+                }
+
+                //when released
+                if (_InputManager1.jumpWasReleased)
+                {
+                    resetTriggersCoroutine = StartCoroutine(Reset());
+
+                    if (jumpBufferTimer > 0f)
+                    {
+                        jumpReleasesDuringBuffer = true;
+                    }
+                    if (isJumping && verticalVelocity > 0f)
+                    {
+                        if (isPastApexThreshold)
+                        {
+                            isPastApexThreshold = false;
+                            isFastFalling = true;
+                            fastfallTime = moveStats.timeForUpwardsCancel;
+                            verticalVelocity = 0f;
+                        }
+                        else
+                        {
+                            isFastFalling = true;
+                            fastFallReleasesSpeed = verticalVelocity;
+                        }
+                    }
+                }
+
+                //initiate jump w jump buffering and coyote time
+                if (jumpBufferTimer > 0f && !isJumping && (isGrounded || coyoteTimer > 0f))
+                {
+                    InitiateJump(1);
+                    if (jumpReleasesDuringBuffer)
+                    {
+                        isFastFalling = true;
+                        fastFallReleasesSpeed = verticalVelocity;
+                    }
+                }
+
+                //double jump
+                else if (jumpBufferTimer > 0f && isJumping && numberOfJumpsUsed < moveStats.numberOfJumpsAllowed)
+                {
+                    isFastFalling = false;
+                    InitiateJump(1);
+                }
+
+                //air jump after coyote time lapsed
+                else if (jumpBufferTimer > 0f && isFalling && numberOfJumpsUsed < moveStats.numberOfJumpsAllowed - 1)
+                {
+                    InitiateJump(2);
+                    isFastFalling = false;
+                }
+
+                //landed
+                if ((isJumping || isFastFalling) && isGrounded && verticalVelocity <= 0f)
+                {
+                    isJumping = false;
+                    isFalling = false;
+                    isFastFalling = false;
+                    fastfallTime = 0f;
+                    isPastApexThreshold = false;
+                    numberOfJumpsUsed = 0;
+
+                    verticalVelocity = Physics2D.gravity.y;
+                }
+                else if (OnWall() && !isGrounded)
+                {
+                    verticalVelocity = 0f;
+                    anim.SetTrigger("WallSlide");
+                    if (_InputManager1.jumpWasPressed)
+                    {
+                        // Determine wall direction using isFacingRight (1 if facing right, -1 if facing left)
+                        float wallDirection = isFacingRight ? 1f : -1f;
+
+                        // Create a Vector2 for jumping away from the wall and upwards
+                        Vector2 jumpDirection = new Vector2(-wallDirection * jumpAwayForce, jumpUpwardForce);
+
+                        // Apply the jump direction to the player's Rigidbody2D
+                        moveVelocity = Vector2.Lerp(moveVelocity, jumpDirection, 20f * Time.fixedDeltaTime);
+                        rb2.velocity = new Vector2(moveVelocity.x, rb2.velocity.y);
+                        verticalVelocity = moveVelocity.magnitude;
+                    }
+                }//wall jump
+            }
         }
         private void InitiateJump(int NumberOfJumpsUsed)
         {

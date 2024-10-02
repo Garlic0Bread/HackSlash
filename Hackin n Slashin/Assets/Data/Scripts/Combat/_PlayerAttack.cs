@@ -1,6 +1,7 @@
 using OWL;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,7 @@ public class _PlayerAttack : MonoBehaviour
     private int currentAttack = 0;
     public float timeSinceAttack = 0.0f;
     public bool isAttacking = false;
+    public string PlayerTagName;
 
     [Header("Audio Handling")]
     [SerializeField] private bool bonusOn;
@@ -51,45 +53,83 @@ public class _PlayerAttack : MonoBehaviour
     }
     private void Update()
     {
-       // currentAudioTime = audioSource.time;
-        if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
+        if (this.gameObject.CompareTag("Player1"))
         {
-            // Player hit within the timing window, apply bonus damage
-            if (Input.GetKeyDown(KeyCode.E) && timeSinceAttack >= timeBtwAttacks)
+            // currentAudioTime = audioSource.time;
+            if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
             {
-                print("bonus damage activated");
-                bonusOn = true;
+                // Player hit within the timing window, apply bonus damage
+                if (Input.GetKeyDown(KeyCode.E) && timeSinceAttack >= timeBtwAttacks)
+                {
+                    print("bonus damage activated");
+                    bonusOn = true;
+                    Melee_Attack();
+                }
+            }
+
+            if (_InputManager.isAttacking && timeSinceAttack >= timeBtwAttacks)
+            {
+                isAttacking = true;
                 Melee_Attack();
             }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                Projectile_Attack();
+                print("shooting");
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1)) //changing shooting modes
+            {
+                SetShootMode(ShootMode.Single);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SetShootMode(ShootMode.Spread);
+            }
+            timeSinceAttack += Time.deltaTime;
         }
 
-        if (_InputManager.isAttacking && timeSinceAttack >= timeBtwAttacks)
+        if (this.gameObject.CompareTag("Player2"))
         {
-            isAttacking = true;
-            Melee_Attack();
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            Projectile_Attack();
-            print("shooting");
-        }
+            // currentAudioTime = audioSource.time;
+            if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
+            {
+                // Player hit within the timing window, apply bonus damage
+                if (Input.GetKeyDown(KeyCode.E) && timeSinceAttack >= timeBtwAttacks)
+                {
+                    print("bonus damage activated");
+                    bonusOn = true;
+                    Melee_Attack();
+                }
+            }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) //changing shooting modes
-        {
-            SetShootMode(ShootMode.Single);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SetShootMode(ShootMode.Spread);
-        }
-        timeSinceAttack += Time.deltaTime;
+            if (_InputManager1.isAttacking && timeSinceAttack >= timeBtwAttacks)
+            {
+                isAttacking = true;
+                Melee_Attack();
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                Projectile_Attack();
+                print("shooting");
+            }
 
+            if (Input.GetKeyDown(KeyCode.Alpha1)) //changing shooting modes
+            {
+                SetShootMode(ShootMode.Single);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SetShootMode(ShootMode.Spread);
+            }
+            timeSinceAttack += Time.deltaTime;
+        }
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attackTransform.position, attackRange);
     }
-
     private void Melee_Attack()
     {
         //deal damage
@@ -101,7 +141,6 @@ public class _PlayerAttack : MonoBehaviour
 
             if (bonusOn && i_Damageable != null)// Player hit within song keyMoment timing-window, apply bonus damage
             {
-                
                 i_Damageable.Damage(bonusDamage);
             }
 

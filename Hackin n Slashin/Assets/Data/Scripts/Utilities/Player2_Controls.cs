@@ -35,6 +35,33 @@ public partial class @Player2_Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""314276bf-d6b9-4050-b16d-3131a17ecbf0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""7be51b53-342a-4843-90d6-a8ade13c241f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""4fe87948-42aa-47d6-8d42-d0f7f1ab3dc1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +119,39 @@ public partial class @Player2_Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Movement_P2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9effc02-af0c-4fd3-81c8-6ce1e920f2b4"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc6e0355-8791-4c43-8428-beffc7dc1adc"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""88d402b3-9f52-4f39-bfff-9b6f08445d1d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -101,6 +161,9 @@ public partial class @Player2_Controls: IInputActionCollection2, IDisposable
         // Player2_Movement
         m_Player2_Movement = asset.FindActionMap("Player2_Movement", throwIfNotFound: true);
         m_Player2_Movement_Movement_P2 = m_Player2_Movement.FindAction("Movement_P2", throwIfNotFound: true);
+        m_Player2_Movement_Jump = m_Player2_Movement.FindAction("Jump", throwIfNotFound: true);
+        m_Player2_Movement_Dash = m_Player2_Movement.FindAction("Dash", throwIfNotFound: true);
+        m_Player2_Movement_Attack = m_Player2_Movement.FindAction("Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -163,11 +226,17 @@ public partial class @Player2_Controls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player2_Movement;
     private List<IPlayer2_MovementActions> m_Player2_MovementActionsCallbackInterfaces = new List<IPlayer2_MovementActions>();
     private readonly InputAction m_Player2_Movement_Movement_P2;
+    private readonly InputAction m_Player2_Movement_Jump;
+    private readonly InputAction m_Player2_Movement_Dash;
+    private readonly InputAction m_Player2_Movement_Attack;
     public struct Player2_MovementActions
     {
         private @Player2_Controls m_Wrapper;
         public Player2_MovementActions(@Player2_Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement_P2 => m_Wrapper.m_Player2_Movement_Movement_P2;
+        public InputAction @Jump => m_Wrapper.m_Player2_Movement_Jump;
+        public InputAction @Dash => m_Wrapper.m_Player2_Movement_Dash;
+        public InputAction @Attack => m_Wrapper.m_Player2_Movement_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Player2_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -180,6 +249,15 @@ public partial class @Player2_Controls: IInputActionCollection2, IDisposable
             @Movement_P2.started += instance.OnMovement_P2;
             @Movement_P2.performed += instance.OnMovement_P2;
             @Movement_P2.canceled += instance.OnMovement_P2;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         private void UnregisterCallbacks(IPlayer2_MovementActions instance)
@@ -187,6 +265,15 @@ public partial class @Player2_Controls: IInputActionCollection2, IDisposable
             @Movement_P2.started -= instance.OnMovement_P2;
             @Movement_P2.performed -= instance.OnMovement_P2;
             @Movement_P2.canceled -= instance.OnMovement_P2;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         public void RemoveCallbacks(IPlayer2_MovementActions instance)
@@ -207,5 +294,8 @@ public partial class @Player2_Controls: IInputActionCollection2, IDisposable
     public interface IPlayer2_MovementActions
     {
         void OnMovement_P2(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }

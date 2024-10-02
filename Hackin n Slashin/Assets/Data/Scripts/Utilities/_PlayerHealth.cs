@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class _PlayerHealth : MonoBehaviour
+public class _PlayerHealth : MonoBehaviour, IDamageable
 {
     private float maxhealth;
     [SerializeField] private float health;
@@ -16,7 +16,11 @@ public class _PlayerHealth : MonoBehaviour
     }
     private void Update()
     {
-        if (this.CompareTag("Player"))
+        if (this.CompareTag("Player1"))
+        {
+            healthBar.fillAmount = health / 100f;
+        }
+        else if (this.CompareTag("Player2"))
         {
             healthBar.fillAmount = health / 100f;
         }

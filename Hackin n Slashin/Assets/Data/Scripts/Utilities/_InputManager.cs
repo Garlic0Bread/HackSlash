@@ -19,6 +19,7 @@ public class _InputManager : MonoBehaviour
     private InputAction moveAction;
     private InputAction jumpAction;
     private InputAction runAction;
+    private InputAction attackingAction;
     public string player_MovementName;
 
     //private InputAction attack;
@@ -28,6 +29,7 @@ public class _InputManager : MonoBehaviour
         playerControls = new PlayerControls();
         playerInput = GetComponent<PlayerInput>();
 
+        attackingAction = playerInput.actions["Attack"];
         moveAction = playerInput.actions[player_MovementName];
         jumpAction = playerInput.actions["Jump"];
         runAction = playerInput.actions["Dash"];
@@ -48,6 +50,7 @@ public class _InputManager : MonoBehaviour
 
         runIsHeld = runAction.IsPressed();
         jumpIsHeld = jumpAction.IsPressed();
+        isAttacking = attackingAction.IsPressed();
         jumpWasPressed = jumpAction.WasPressedThisFrame();
         jumpWasReleased = jumpAction.WasReleasedThisFrame();
     }
