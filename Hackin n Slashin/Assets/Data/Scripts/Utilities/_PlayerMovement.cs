@@ -65,20 +65,38 @@ namespace OWL
         {
             CollisionChecks();
             Jump();
-            if (isGrounded)
+            var playerInput_P1 = _InputManager.Movement;
+            var playerInput_P2 = _InputManager1.Movement;
+
+            if (this.gameObject.CompareTag("Player1"))
             {
-                Move(moveStats.GroundAcceleration, moveStats.GroundDeceleration, _InputManager.Movement);
+                if (isGrounded)
+                {
+                    Move(moveStats.GroundAcceleration, moveStats.GroundDeceleration, _InputManager.Movement);
+                }
+                else
+                {
+                    Move(moveStats.AirAcceleration, moveStats.AirDeceleration, _InputManager.Movement);
+                }
             }
-            else
+            else if (this.gameObject.CompareTag("Player2"))
             {
-                Move(moveStats.AirAcceleration, moveStats.AirDeceleration, _InputManager.Movement);
+                if (isGrounded)
+                {
+                    Move(moveStats.GroundAcceleration, moveStats.GroundDeceleration, _InputManager1.Movement);
+                }
+                else
+                {
+                    Move(moveStats.AirAcceleration, moveStats.AirDeceleration, _InputManager1.Movement);
+                }
             }
+
+            
         }
 
         #region Movement
         private void Move(float acceleration, float deceleration, Vector2 moveInput)
         {
-            
             if(playerAttack.timeSinceAttack >= 0.55f)
             {
                 playerAttack.isAttacking = false;
