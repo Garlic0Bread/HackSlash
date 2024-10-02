@@ -17,15 +17,17 @@ namespace OWL
         public static bool jumpIsHeld;
         public static bool jumpWasPressed;
         public static bool jumpWasReleased;
+        public GameObject player1;
+        public GameObject player2;
 
         private InputAction moveAction;
         private InputAction jumpAction;
         private InputAction runAction;
-        //private InputAction attack;
+        private InputAction attack;
 
         private void Awake()
         {
-            if (instance == null)
+            /*if (instance == null)
             {
                 instance = this;
                 DontDestroyOnLoad(gameObject);
@@ -33,15 +35,27 @@ namespace OWL
             else
             {
                 Destroy(gameObject);
-            }
+            }*/
+            player1 = GameObject.FindGameObjectWithTag("Player1");
+            player2 = GameObject.FindGameObjectWithTag("Player2");
+            
 
             playerControls = new PlayerControls();
-            playerInput = GetComponent <PlayerInput>();
+            if (player1)
+            {
+                playerInput = player1.GetComponent<PlayerInput>();
+                playerInput.SwitchCurrentControlScheme("Keyboard", Keyboard.current, Mouse.current);
+            }
+            else if(player2)
+            {
+                playerInput = player2.GetComponent<PlayerInput>();
+                playerInput.SwitchCurrentControlScheme("Gamepad", Gamepad.current);
+            }
 
             moveAction = playerInput.actions["Movement"];
             jumpAction = playerInput.actions["Jump"];
             runAction = playerInput.actions["Dash"];
-            //attack = playerInput.actions["Attack2"];
+            attack = playerInput.actions["Attack"];
         }
 
         private void OnEnable()
@@ -59,7 +73,7 @@ namespace OWL
 
             runIsHeld = runAction.IsPressed();
             jumpIsHeld = jumpAction.IsPressed();
-            //isAttacking = attack.WasPressedThisFrame();
+            isAttacking = attack.IsPressed();
             jumpWasPressed = jumpAction.WasPressedThisFrame();
             jumpWasReleased = jumpAction.WasReleasedThisFrame();
         }

@@ -14,11 +14,8 @@ public class _PlayerAttack : MonoBehaviour
 
     [Header("Audio Handling")]
     [SerializeField] private bool bonusOn;
-    [SerializeField] private float currentAudioTime;
-    [SerializeField] private float timeWindow = 5f; // 5-second window
-    [SerializeField] private float targetTime = 20f; // 00:20 in seconds
     [SerializeField] private float bonusDamage = 3f;
-    [SerializeField] private AudioSource audioSource; // Your music track
+    AudioSource_Manager songManager;
 
     [Header("Melee Attack")]
     [SerializeField] private float damageAmount = 1f;
@@ -47,14 +44,12 @@ public class _PlayerAttack : MonoBehaviour
         SetShootMode(currentShootmode);
         anim = GetComponent<Animator>();
         timeSinceAttack = timeBtwAttacks;
-        audioSource.Play();
+        songManager = FindAnyObjectByType<AudioSource_Manager>();
     }
     private void Update()
     {
-        currentAudioTime = audioSource.time;
-        if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
-        {
-            // Player hit within the timing window, apply bonus damage
+        if (songManager.isOnBeat == true)
+        {// // Player hits SP attack button within song's keyMoment timing-window, apply bonus damage
             if (Input.GetKeyDown(KeyCode.E) && timeSinceAttack >= timeBtwAttacks)
             {
                 print("bonus damage activated");
@@ -63,15 +58,14 @@ public class _PlayerAttack : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && timeSinceAttack >= timeBtwAttacks)
-        {
+        if (_InputManager.isAttacking && timeSinceAttack >= timeBtwAttacks)
+        {//normal damage melee
             isAttacking = true;
             Melee_Attack();
         }
         else if (Input.GetMouseButtonDown(1))
-        {
+        {//shooting
             Projectile_Attack();
-            print("shooting");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) //changing shooting modes
@@ -83,7 +77,6 @@ public class _PlayerAttack : MonoBehaviour
             SetShootMode(ShootMode.Spread);
         }
         timeSinceAttack += Time.deltaTime;
-
     }
     private void OnDrawGizmos()
     {
@@ -99,7 +92,7 @@ public class _PlayerAttack : MonoBehaviour
         {
             IDamageable i_Damageable = hits[i].collider.gameObject.GetComponent<IDamageable>();
 
-            if (bonusOn && i_Damageable != null)// Player hit within song keyMoment timing-window, apply bonus damage
+            if (bonusOn && i_Damageable != null)
             {
                 
                 i_Damageable.Damage(bonusDamage);
