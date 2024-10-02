@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
+    public BeatManager beatManagerScript;
     public TMP_Text text;
     public TMP_Text counterText;
     public TMP_Text HitCounterText;
@@ -21,8 +22,29 @@ public class UIManager : MonoBehaviour
     public float songInterval;
     public float startDecreasing;
     // Start is called before the first frame update
+
+    void Awake()
+    {
+        if (beatManagerScript == null)
+        {
+            beatManagerScript = FindObjectOfType<BeatManager>();
+            if (beatManagerScript == null)
+            {
+                Debug.LogError("No BeatManager found in the scene!");
+            }
+        }
+    }
+    
     void Start()
     {
+        if (beatManagerScript != null)
+        {
+            bpm = beatManagerScript._bpm;
+        }
+        else
+        {
+            Debug.LogError("beatManagerScript is not assigned!");
+        }
         interval_Count = (60f / (bpm * stepCount));
         intertvalCountString = interval_Count.ToString();
         hitCounter = 0;
