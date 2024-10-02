@@ -78,10 +78,7 @@ namespace OWL
         #region Movement
         private void Move(float acceleration, float deceleration, Vector2 moveInput)
         {
-            if (playerAttack.isAttacking && isGrounded)
-            {
-                moveInput = Vector2.zero;
-            }
+            
             if(playerAttack.timeSinceAttack >= 0.55f)
             {
                 playerAttack.isAttacking = false;

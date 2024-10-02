@@ -6,11 +6,11 @@ public class AudioSource_Manager : MonoBehaviour
 {
     [Header("Audio Handling")]
     [SerializeField] private float currentAudioTime;
-    [SerializeField] private float timeWindow = 5f; // 5-second window
-    [SerializeField] private float targetTime = 20f; // 00:20 in seconds
+    [SerializeField] private float timeWindow; // 5-second window
+    [SerializeField] private float targetTime; // 00:20 in seconds
     [SerializeField] private AudioSource audioSource; // Your music track
     public bool isOnBeat;
-
+    
     void Start()
     {
         audioSource.Play();
