@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
 public class CharacterSelectManager : MonoBehaviour
 {
@@ -63,6 +64,11 @@ public class CharacterSelectManager : MonoBehaviour
         {
             StartCoroutine(ChangeScene());
         }
+    }
+
+    public void PlayerIMGSelect()
+    {
+        
     }
 
     public void CharacterHasBeenSelected()
