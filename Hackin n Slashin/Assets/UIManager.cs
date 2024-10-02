@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
     public float counterTick;
     public float songInterval;
     public float startDecreasing;
+    
     // Start is called before the first frame update
 
     void Awake()
