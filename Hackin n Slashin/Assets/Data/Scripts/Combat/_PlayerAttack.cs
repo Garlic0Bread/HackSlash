@@ -30,6 +30,7 @@ public class _PlayerAttack : MonoBehaviour
     [SerializeField] private Transform attackTransform;
     [SerializeField] private LayerMask attackableLayer;
     [SerializeField] private float timeBtwAttacks = 0.25f;
+    [SerializeField] private GameObject damageEffect;
 
     [Header("Shooting Attack")]
     [SerializeField] private float nextFireTime;
@@ -142,6 +143,9 @@ public class _PlayerAttack : MonoBehaviour
         for(int i = 0; i < hits.Length; i++)
         {
             IDamageable i_Damageable = hits[i].collider.gameObject.GetComponent<IDamageable>();
+
+            GameObject effect = Instantiate(damageEffect, attackTransform.position, Quaternion.identity);
+            Destroy(effect, 5f);
 
             if (bonusOn && i_Damageable != null)// Player hit within song keyMoment timing-window, apply bonus damage
             {

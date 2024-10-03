@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public AudioSource_Manager AS_manager;
     public float playerComboStat;
+    //public bool isRound1;
+    //public bool isRound2;
 
     // Start is called before the first frame update
     void Start()

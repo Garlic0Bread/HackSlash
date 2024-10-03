@@ -16,6 +16,7 @@ public class _Enemies : MonoBehaviour
 
     [SerializeField] private GameObject enemyBullet;
     [SerializeField] private GameObject shrapnelVFX;
+    [SerializeField] private GameObject damageEffect;
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private bool Swarmer = false;
     [SerializeField] private bool Shooter = false;
@@ -91,6 +92,7 @@ public class _Enemies : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        
         if (Time.time - _lastAttackTime < attackCooldown) return;
         if (collision.gameObject.CompareTag("Player"))
         {
