@@ -5,14 +5,20 @@ using UnityEngine;
 
 public class _PlayerHealth : MonoBehaviour, IDamageable
 {
+    public bool isDead;
+    private Rigidbody2D rb2;
     private float maxhealth;
+    public float deathForce = 10f;
+    _PlayerMovement playerMovement;
     [SerializeField] private float health;
     [SerializeField] private Animator anim;
     [SerializeField] private Image healthBar;
-
     private void Start()
     {
+        rb2 = GetComponent<Rigidbody2D>();
+        isDead = false;
         anim = GetComponent<Animator>();
+        playerMovement = GetComponent<_PlayerMovement>();
     }
     private void Update()
     {
@@ -66,8 +72,7 @@ public class _PlayerHealth : MonoBehaviour, IDamageable
     }
     private void Die()
     {
-        anim.SetTrigger("Dead");
-        Destroy(gameObject, anim.GetCurrentAnimatorStateInfo(0).length);
+        //anim.SetTrigger("Dead");
+        Destroy(gameObject, 1f);
     }
-
 }
