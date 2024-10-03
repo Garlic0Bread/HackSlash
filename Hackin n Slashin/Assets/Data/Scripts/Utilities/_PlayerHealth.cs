@@ -6,6 +6,7 @@ using UnityEngine;
 public class _PlayerHealth : MonoBehaviour, IDamageable
 {
     public bool isDead;
+    public GameManager GM;
     private Rigidbody2D rb2;
     private float maxhealth;
     public float deathForce = 10f;
@@ -13,6 +14,7 @@ public class _PlayerHealth : MonoBehaviour, IDamageable
     [SerializeField] private float health;
     [SerializeField] private Animator anim;
     [SerializeField] private Image healthBar;
+    [SerializeField] private GameObject death_ExplosionVFX;
     private void Start()
     {
         rb2 = GetComponent<Rigidbody2D>();
@@ -25,11 +27,20 @@ public class _PlayerHealth : MonoBehaviour, IDamageable
         if (this.CompareTag("Player1"))
         {
             healthBar.fillAmount = health / 100f;
+            if (health <= 0f)
+            {
+                GM.isGameOver = true;
+            }
         }
         else if (this.CompareTag("Player2"))
         {
             healthBar.fillAmount = health / 100f;
+            if (health <= 0f)
+            {
+                GM.isGameOver = true;
+            }
         }
+        
     }
 
     private IEnumerator visualIndicator(Color color)
@@ -72,7 +83,12 @@ public class _PlayerHealth : MonoBehaviour, IDamageable
     }
     private void Die()
     {
+        death_ExplosionVFX.SetActive(true);
+
+        GM.isGameOver = true;
         //anim.SetTrigger("Dead");
         Destroy(gameObject, 1f);
     }
+
+    
 }

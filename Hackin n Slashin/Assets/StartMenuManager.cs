@@ -23,7 +23,7 @@ public class StartMenuManager : MonoBehaviour
     
     public void StartLocalGame()
     {
-        SceneManager.LoadScene("LocalPlayCharSelect");
+        SceneManager.LoadScene(1);
     }
 
     public void StartOnlineGame()

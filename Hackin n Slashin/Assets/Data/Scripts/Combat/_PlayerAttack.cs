@@ -21,7 +21,7 @@ public class _PlayerAttack : MonoBehaviour
     [SerializeField] private float currentAudioTime;
     [SerializeField] private float timeWindow = 5f; // 5-second window
     [SerializeField] private float targetTime = 20f; // 00:20 in seconds
-    [SerializeField] private float bonusDamage = 3f;
+    [SerializeField] private float bonusDamage = 1f;
     [SerializeField] private AudioSource audioSource; // Your music track
 
     [Header("Melee Attack")]
@@ -58,7 +58,11 @@ public class _PlayerAttack : MonoBehaviour
     {
         if (this.gameObject.CompareTag("Player1"))
         {
-            
+            if (UIM.hitCounter > 0f)
+            {
+                bonusOn = true;
+                bonusDamage = bonusDamage * UIM.hitCounter;
+            }
             // currentAudioTime = audioSource.time;
             if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
             {
@@ -95,6 +99,11 @@ public class _PlayerAttack : MonoBehaviour
 
         if (this.gameObject.CompareTag("Player2"))
         {
+            if(UIMP2.hitCounterP2 > 0f)
+            {
+                bonusOn = true;
+                bonusDamage = bonusDamage * UIMP2.hitCounterP2;
+            }
             
             // currentAudioTime = audioSource.time;
             if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
@@ -103,7 +112,7 @@ public class _PlayerAttack : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E) && timeSinceAttack >= timeBtwAttacks)
                 {
                     print("bonus damage activated");
-                    bonusOn = true;
+                   
                     Melee_Attack();
                 }
             }
@@ -147,12 +156,12 @@ public class _PlayerAttack : MonoBehaviour
             GameObject effect = Instantiate(damageEffect, attackTransform.position, Quaternion.identity);
             Destroy(effect, 5f);
 
-            if (bonusOn && i_Damageable != null)// Player hit within song keyMoment timing-window, apply bonus damage
+            /*if (bonusOn && i_Damageable != null)// Player hit within song keyMoment timing-window, apply bonus damage
             {
                 i_Damageable.Damage(bonusDamage);
-            }
+            }*/
 
-            else if  (i_Damageable != null )
+            /*else*/if  (i_Damageable != null )
             {
                 i_Damageable.Damage(damageAmount);
             }
