@@ -21,6 +21,11 @@ public class UIManager : MonoBehaviour
     public float counterTick;
     public float songInterval;
     public float startDecreasing;
+
+    //if step count = 0.25 and interval = 1 you have to hit notes 1 & 3 in 1,2,3,4 (in halftime)
+    //if step count = 0.5 and interval = 1 you have to hit notes 1,2,3 & 4 (in halftime or 4 beats per bar)
+    //if step count = 1 and interval = 1 you have to hit notes 1,2,3,4,5,6,7 & 8 (in 8 beats per bar)
+    //if step count = 1 and interval = 0.5 you have to hit every 16th note in the bar.
     
     // Start is called before the first frame update
 
