@@ -79,16 +79,16 @@ public class UIManager : MonoBehaviour
 
     public void Enablecombo()
     {
-        if (hitCounter >= 5f && hitCounter < 10f)
+        if (hitCounter >= 5f && hitCounter < 25f)
         {
             Player1ComboFX1.SetActive(true);
         }
-        if(hitCounter >= 10f && hitCounter < 15f)
+        if(hitCounter >= 25f && hitCounter < 75f)
         {
             Player1ComboFX2.SetActive(true);
             Player1ComboFX1.SetActive(false);
         }
-        if(hitCounter >= 15f)
+        if(hitCounter >= 75f)
         {
             Player1ComboFX3.SetActive(true);
             Player1ComboFX2.SetActive(false);

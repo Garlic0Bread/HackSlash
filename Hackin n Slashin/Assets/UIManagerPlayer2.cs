@@ -62,18 +62,16 @@ public class UIManagerPlayer2 : MonoBehaviour
 
     public void EnablecomboFXP2()
     {
-        if (this.gameObject == null)
-        {
-            if (hitCounterP2 >= 5f && hitCounterP2 < 10f)
+            if (hitCounterP2 >= 5f && hitCounterP2 < 25f)
             {
                 Player2ComboFX1.SetActive(true);
             }
-            if (hitCounterP2 >= 10f && hitCounterP2 < 15f)
+            if (hitCounterP2 >= 25f && hitCounterP2 < 75f)
             {
                 Player2ComboFX2.SetActive(true);
                 Player2ComboFX1.SetActive(false);
             }
-            if (hitCounterP2 >= 15f)
+            if (hitCounterP2 >= 75f)
             {
                 Player2ComboFX3.SetActive(true);
                 Player2ComboFX2.SetActive(false);
@@ -83,9 +81,7 @@ public class UIManagerPlayer2 : MonoBehaviour
                 Player2ComboFX1.SetActive(false);
                 Player2ComboFX2.SetActive(false);
                 Player2ComboFX3.SetActive(false);
-            }
-        }
-        
+            }        
     }
 
     public void intervalCounterP2()
