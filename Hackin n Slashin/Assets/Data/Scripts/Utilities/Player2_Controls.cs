@@ -133,17 +133,6 @@ public partial class @Player2_Controls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""0d4ae523-9ccc-4b7b-9ac6-93d91e884dd9"",
-                    ""path"": ""<Keyboard>/k"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""bc6e0355-8791-4c43-8428-beffc7dc1adc"",
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
