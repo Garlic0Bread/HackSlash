@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class _PlayerAttack : MonoBehaviour
 {
+    public UIManager UIM;
+    public UIManagerPlayer2 UIMP2;
     private Animator anim;
     private RaycastHit2D[] hits;
     private int currentAttack = 0;
@@ -55,6 +57,7 @@ public class _PlayerAttack : MonoBehaviour
     {
         if (this.gameObject.CompareTag("Player1"))
         {
+            
             // currentAudioTime = audioSource.time;
             if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
             {
@@ -91,6 +94,7 @@ public class _PlayerAttack : MonoBehaviour
 
         if (this.gameObject.CompareTag("Player2"))
         {
+            
             // currentAudioTime = audioSource.time;
             if (currentAudioTime >= targetTime - timeWindow && currentAudioTime <= targetTime + timeWindow)
             {

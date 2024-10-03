@@ -41,12 +41,12 @@ public class _InputManager1 : MonoBehaviour
         playerControls?.Disable();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Movement = moveAction.ReadValue<Vector2>();
         runIsHeld = runAction.IsPressed();
         jumpIsHeld = jumpAction.IsPressed();
-        isAttacking = attackingAction.IsPressed();
+        isAttacking = attackingAction.WasPressedThisFrame();
         jumpWasPressed = jumpAction.WasPressedThisFrame();
         jumpWasReleased = jumpAction.WasReleasedThisFrame();
     }

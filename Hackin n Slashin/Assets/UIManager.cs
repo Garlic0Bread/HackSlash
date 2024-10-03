@@ -21,12 +21,16 @@ public class UIManager : MonoBehaviour
     public float counterTick;
     public float songInterval;
     public float startDecreasing;
+    public GameObject Player1ComboFX1;
+    public GameObject Player1ComboFX2;
+    public GameObject Player1ComboFX3;
+
 
     //if step count = 0.25 and interval = 1 you have to hit notes 1 & 3 in 1,2,3,4 (in halftime)
     //if step count = 0.5 and interval = 1 you have to hit notes 1,2,3 & 4 (in halftime or 4 beats per bar)
     //if step count = 1 and interval = 1 you have to hit notes 1,2,3,4,5,6,7 & 8 (in 8 beats per bar)
     //if step count = 1 and interval = 0.5 you have to hit every 16th note in the bar.
-    
+
     // Start is called before the first frame update
 
     void Awake()
@@ -69,6 +73,40 @@ public class UIManager : MonoBehaviour
         intervalCounter();
         CheckIfPressed();
         startDecreasing -= Time.deltaTime;
+        Enablecombo();
+    }
+    
+
+    public void Enablecombo()
+    {
+        if (hitCounter >= 5f && hitCounter < 10f)
+        {
+            Player1ComboFX1.SetActive(true);
+        }
+        if(hitCounter >= 10f && hitCounter < 15f)
+        {
+            Player1ComboFX2.SetActive(true);
+            Player1ComboFX1.SetActive(false);
+        }
+        if(hitCounter >= 15f)
+        {
+            Player1ComboFX3.SetActive(true);
+            Player1ComboFX2.SetActive(false);
+        }
+        if(hitCounter < 5f)
+        {
+            Player1ComboFX1.SetActive(false);
+            Player1ComboFX2.SetActive(false);
+            Player1ComboFX3.SetActive(false);
+        }
+            
+    }
+
+
+
+    public void GetTimeTillDecrease()
+    {
+        //return startDecreasing;
     }
 
     public void intervalCounter()
@@ -82,25 +120,31 @@ public class UIManager : MonoBehaviour
 
     public void CheckIfPressed()
     {
-        if ((Input.anyKeyDown) && ((counterTick > 0f) && (counterTick < ((interval_Count*songInterval) - ((interval_Count *songInterval) * 0.75f)))))
-        {
-            hitCounter++;
-            startDecreasing = interval_Count * 16f;
-        }
-        if (Input.anyKeyDown && (counterTick > ((interval_Count*songInterval) - ((interval_Count*songInterval) * 0.25f))) && (counterTick < (interval_Count* songInterval)))
-        {
-            hitCounter++;
-            startDecreasing = interval_Count * 16f;
-        }
-        if(Input.anyKeyDown && counterTick == 0f)
-        {
-            hitCounter = hitCounter + 2;
-            startDecreasing = interval_Count * 16f;
-        }
-        if(Input.anyKeyDown && (counterTick > ((interval_Count* songInterval) -((interval_Count*songInterval) *0.75f))) && (counterTick < ((interval_Count * songInterval) - ((interval_Count * songInterval) * 0.25f)))) 
-        { 
-            hitCounter = 0f; 
-        }       
+        
+                Debug.Log("P111111111111111111111111111111111111 script");
+                if ((_InputManager.isAttacking) && ((counterTick > 0f) && (counterTick < ((interval_Count * songInterval) - ((interval_Count * songInterval) * 0.75f)))))
+                {
+                    hitCounter++;
+                    startDecreasing = interval_Count * 16f;
+                }
+                if (_InputManager.isAttacking && (counterTick > ((interval_Count * songInterval) - ((interval_Count * songInterval) * 0.25f))) && (counterTick < (interval_Count * songInterval)))
+                {
+                    hitCounter ++;
+                    startDecreasing = interval_Count * 16f;
+                }
+                if (_InputManager.isAttacking && counterTick == 0f)
+                {
+                    hitCounter = hitCounter + 2;
+                    startDecreasing = interval_Count * 16f;
+                }
+                if (_InputManager.isAttacking && (counterTick > ((interval_Count * songInterval) - ((interval_Count * songInterval) * 0.75f))) && (counterTick < ((interval_Count * songInterval) - ((interval_Count * songInterval) * 0.25f))))
+                {
+                    hitCounter = 0f;
+                }
+                
+            
+ 
+        
     }
 
     IEnumerator DecreaseScore()
