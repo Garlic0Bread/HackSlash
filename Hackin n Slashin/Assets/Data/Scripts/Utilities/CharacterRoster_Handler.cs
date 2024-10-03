@@ -9,10 +9,11 @@ public class CharacterRoster_Handler : MonoBehaviour, IPointerEnterHandler, IPoi
 {
     [SerializeField] private GameObject playerOne_Description;
     [SerializeField] private GameObject playerTwo_Description;
+    [SerializeField] private GameObject chosen_PlayerChar;
     [SerializeField] private GameObject playerOne_Roster;
     [SerializeField] private GameObject playerTwo_Roster;
     [SerializeField] private GameObject descriptionBox;
-    [SerializeField] private GameObject avatar_Icon;
+    [SerializeField] private GameObject player_Icon;
     bool playerTwo_turn;
 
     private void Start()
@@ -39,12 +40,14 @@ public class CharacterRoster_Handler : MonoBehaviour, IPointerEnterHandler, IPoi
     public void Character_Chosen()
     {
         playerTwo_turn = true;
-        avatar_Icon.SetActive(true);
+        player_Icon.SetActive(true);
+        chosen_PlayerChar.SetActive(true);
     }
 
     private void Reset()
     {
         playerTwo_turn = false;
+        player_Icon.SetActive(false);
         playerOne_Roster.SetActive(true);
         playerTwo_Roster.SetActive(false);
         playerOne_Description.SetActive(true);
